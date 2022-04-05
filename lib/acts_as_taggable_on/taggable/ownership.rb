@@ -131,12 +131,12 @@ module ActsAsTaggableOn
             if old_tags.present?
               ActsAsTaggableOn::Tagging.where(taggable_id: id, taggable_type: self.class.base_class.to_s,
                                               tagger_type: owner.class.base_class.to_s, tagger_id: owner.id,
-                                              tag_id: old_tags, context: context).destroy_all
+                                              tag_id: old_tags, context: context, tenant: taggable_tenant).destroy_all
             end
 
             # Create new taggings:
             new_tags.each do |tag|
-              taggings.create!(tag_id: tag.id, context: context.to_s, tagger: owner, taggable: self)
+              taggings.create!(tag_id: tag.id, context: context.to_s, tagger: owner, taggable: self, tenant: taggable_tenant)
             end
           end
         end
